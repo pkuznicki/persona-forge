@@ -8,7 +8,7 @@ from typing import Callable, Optional
 
 from pydantic_ai.messages import ModelMessage
 
-from agents.roles import PERSUASION_STRATEGIES, subject, persuader
+from agents.roles import PERSUASION_STRATEGIES, Fact, subject, persuader, fact_generator
 
 
 @dataclass
@@ -137,3 +137,9 @@ async def run_experiment(
             break
 
     return result
+
+
+async def generate_facts(n: int, model_id: str) -> list[Fact]:
+    agent = fact_generator(model_id)
+    result = await agent.run(f"Generate exactly {n} diverse factual scenarios.")
+    return result.output.facts
